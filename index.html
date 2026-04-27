@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CYBER_JUSTICE | CASE DATABASE</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=VT323&display=swap');
+
+:root {
+  --red: #ff0033;
+  --green: #00ff41;
+  --dim-green: #00aa2a;
+  --orange: #ff6600;
+  --cyan: #00e5ff;
+  --yellow: #ffd700;
+  --bg: #060606;
+  --surface: #0e0e0e;
+  --border: #1e1e1e;
+  --text: #cccccc;
+  --dim: #444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair !important; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Share Tech Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* dot grid */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: radial-gradient(circle, #1c1c1c 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.5;
+  pointer-events: none; z-index: 0;
+}
+
+/* scanlines */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+  pointer-events: none; z-index: 9997;
+}
+
+@keyframes flicker { 0%,100%{opacity:1} 93%{opacity:.9} 94%{opacity:1} 97%{opacity:.93} }
+body { animation: flicker 10s infinite; }
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(0,0,0,.96);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 6px;
+  font-size: .68rem;
+}
+.topbar-left { color: var(--dim-green); letter-spacing: .15em; }
+.topbar-center { color: var(--red); letter-spacing: .3em; font-family: 'Orbitron', sans-serif; font-size: .6rem; }
+.topbar-right { color: var(--green); }
+.live-dot {
+  display: inline-block; width: 7px; height: 7px;
+  background: var(--red); border-radius: 50%;
+  margin-right: 5px; vertical-align: middle;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,0,51,.6)} 50%{box-shadow:0 0 0 6px rgba(255,0,51,0)} }
+
+/* ── TICKER ── */
+.ticker-wrap {
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  background: rgba(255,0,51,.03);
+  padding: .45rem 0;
+  position: relative; z-index: 10;
+}
+.ticker-inner {
+  display: flex; gap: 4rem;
+  animation: ticker 28s linear infinite;
+  white-space: nowrap;
+}
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ticker-item { font-size: .63rem; color: var(--dim-green); letter-spacing: .12em; flex-shrink: 0; }
+.ticker-item .sep { color: var(--red); margin: 0 .5rem; }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 10;
+  text-align: center;
+  padding: 5rem 1.5rem 4rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: -200%;
+  width: 500%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--red), var(--cyan), var(--red), transparent);
+  animation: sweep 6s linear infinite;
+}
+@keyframes sweep { to { left: 100%; } }
+.hero::after {
+  content: '';
+  position: absolute; inset: 20px;
+  border: 1px solid #161616;
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-size: clamp(.52rem, 1.2vw, .68rem);
+  color: var(--dim-green); letter-spacing: .45em; margin-bottom: 1.2rem;
+}
+.hero-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(2rem, 9vw, 5.5rem);
+  font-weight: 900;
+  color: var(--red);
+  text-shadow: 0 0 40px rgba(255,0,51,.7), 0 0 80px rgba(255,0,51,.3);
+  letter-spacing: .08em; line-height: 1; margin-bottom: .5rem;
+  animation: glitch 7s infinite;
+}
+@keyframes glitch {
+  0%,100%{text-shadow:0 0 40px rgba(255,0,51,.7),0 0 80px rgba(255,0,51,.3)}
+  18%{text-shadow:-4px 0 var(--cyan),4px 0 var(--red);transform:translateX(3px)}
+  20%{text-shadow:4px 0 var(--cyan),-4px 0 var(--red);transform:translateX(-3px)}
+  22%{text-shadow:0 0 40px rgba(255,0,51,.7);transform:translateX(0)}
+}
+.hero-tagline {
+  font-family: 'VT323', monospace;
+  font-size: clamp(1.1rem, 3.5vw, 1.7rem);
+  color: var(--green); letter-spacing: .25em; margin-bottom: 2rem;
+}
+.hero-stats {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;
+}
+.stat { display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+.stat-val {
+  font-family: 'VT323', monospace;
+  font-size: 2.2rem; color: var(--red);
+  text-shadow: 0 0 15px rgba(255,0,51,.5); line-height: 1;
+}
+.stat-key { color: var(--dim); letter-spacing: .12em; font-size: .58rem; }
+.stat-div { width: 1px; height: 40px; background: var(--border); align-self: center; }
+
+/* ── MAIN ── */
+main {
+  position: relative; z-index: 10;
+  max-width: 1100px; margin: 0 auto;
+  padding: 3rem 1.2rem 6rem;
+  display: flex; flex-direction: column; gap: 3rem;
+}
+
+.sec-head {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(.58rem, 1.5vw, .75rem);
+  color: var(--red); letter-spacing: .28em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: .8rem; margin-bottom: 1.8rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+.sec-head::before { content: '▶'; color: var(--green); font-size: .58rem; }
+
+/* ── MISSION ── */
+.mission {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 1.8rem;
+  position: relative;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.mission.visible { opacity: 1; transform: translateY(0); }
+.mission::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--green);
+}
+.mission-text { font-size: .82rem; line-height: 1.95; padding-left: .4rem; }
+.mission-text p { margin-bottom: .8rem; }
+.mission-text p:last-child { margin-bottom: 0; }
+.hi-g { color: var(--green); font-weight: bold; }
+.hi-r { color: var(--red); font-weight: bold; }
+.hi-c { color: var(--cyan); }
+
+/* ── CASE CARDS ── */
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.case-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  position: relative; overflow: hidden;
+  text-decoration: none; color: inherit;
+  display: flex; flex-direction: column;
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .7s ease, transform .7s ease, border-color .3s, box-shadow .3s;
+}
+.case-card.visible { opacity: 1; transform: translateY(0); }
+.case-card:hover { border-color: var(--red); box-shadow: 0 0 30px rgba(255,0,51,.12); transform: translateY(-3px); }
+.case-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--red);
+  transition: box-shadow .3s;
+}
+.case-card:hover::before { box-shadow: 2px 0 12px rgba(255,0,51,.5); }
+
+.card-header {
+  padding: 1.1rem 1.2rem .8rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem;
+}
+.card-id { font-size: .56rem; color: var(--dim); letter-spacing: .18em; }
+.card-status {
+  font-size: .52rem; padding: .18rem .45rem;
+  border: 1px solid var(--red);
+  color: var(--red); letter-spacing: .1em; white-space: nowrap;
+  animation: status-pulse 2s step-end infinite;
+}
+@keyframes status-pulse { 50%{ background: rgba(255,0,51,.15); } }
+
+.card-body { padding: 1.2rem 1.2rem 1rem 1.4rem; flex: 1; }
+
+.card-target {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(.95rem, 3vw, 1.4rem);
+  font-weight: 700; color: var(--red);
+  margin-bottom: .25rem; line-height: 1.2;
+}
+.card-subtitle { font-size: .62rem; color: var(--dim-green); letter-spacing: .13em; margin-bottom: 1rem; }
+
+.threat-bar { margin-bottom: 1rem; }
+.threat-label { font-size: .56rem; color: var(--dim); margin-bottom: .3rem; letter-spacing: .1em; }
+.threat-track { height: 3px; background: #1a1a1a; overflow: hidden; }
+.threat-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--red));
+  box-shadow: 0 0 8px rgba(255,0,51,.4);
+  width: 0; transition: width 1.2s ease .3s;
+}
+.case-card.visible .threat-fill { width: var(--fw); }
+
+.card-desc { font-size: .78rem; line-height: 1.8; margin-bottom: 1rem; }
+.card-desc .hi { color: var(--red); }
+.card-desc .victim { color: var(--cyan); }
+
+.charges { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.charge {
+  font-size: .53rem; padding: .18rem .45rem;
+  border: 1px solid var(--border); color: var(--dim); letter-spacing: .07em;
+}
+.charge.red { border-color: rgba(255,0,51,.45); color: rgba(255,60,60,.9); }
+.charge.orange { border-color: rgba(255,102,0,.4); color: var(--orange); }
+.charge.cyan { border-color: rgba(0,229,255,.3); color: rgba(0,229,255,.75); }
+
+.card-footer {
+  padding: .85rem 1.2rem .85rem 1.4rem;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: auto;
+}
+.card-date { font-size: .58rem; color: var(--dim); }
+.card-cta {
+  font-size: .6rem; color: var(--red);
+  letter-spacing: .12em;
+  display: flex; align-items: center; gap: .35rem;
+  transition: gap .25s, text-shadow .25s;
+}
+.case-card:hover .card-cta { gap: .65rem; text-shadow: 0 0 8px rgba(255,0,51,.5); }
+.card-cta::after { content: '→'; }
+
+/* ── CONSOLE ── */
+.console-box {
+  position: fixed; bottom: 15px; right: 15px;
+  width: clamp(220px, 28vw, 320px); height: 118px;
+  background: rgba(0,0,0,.93);
+  border: 1px solid #252525;
+  padding: 9px 11px;
+  font-size: .6rem; color: var(--green);
+  overflow: hidden; z-index: 1000;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 2px;
+}
+@media(max-width:600px){ .console-box { display: none; } }
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 10;
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 1.2rem;
+  text-align: center;
+  font-size: .6rem; color: var(--dim); line-height: 2;
+}
+.f-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: .85rem; color: var(--red);
+  letter-spacing: .3em; margin-bottom: .4rem;
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <span class="topbar-left">UNIT: CYBER_JUSTICE &nbsp;|&nbsp; OPERATION: COMMUNITY_SHIELD</span>
+  <span class="topbar-center"><span class="live-dot"></span>DATABASE ONLINE</span>
+  <span class="topbar-right" id="clock">--:--:--</span>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-item">CASE #992-JETX-EXPOSED<span class="sep">//</span>STATUS: ACTIVE</span>
+    <span class="ticker-item">CASE #119-YURIO-EXPOSED<span class="sep">//</span>STATUS: ACTIVE</span>
+    <span class="ticker-item">VICTIM: MOUSE<span class="sep">//</span>ACCOUNT THEFT CONFIRMED</span>
+    <span class="ticker-item">LOGGER DISTRIBUTION<span class="sep">//</span>EVIDENCE VERIFIED</span>
+    <span class="ticker-item">SERVER NUKE<span class="sep">//</span>CRIME SCENE DOCUMENTED</span>
+    <span class="ticker-item">5+ ALT ACCOUNTS<span class="sep">//</span>TRACED AND LOGGED</span>
+    <span class="ticker-item">SKID ACTIVITY<span class="sep">//</span>CONFIRMED</span>
+    <span class="ticker-item">COMMUNITY SHIELD<span class="sep">//</span>ACTIVE</span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item">CASE #992-JETX-EXPOSED<span class="sep">//</span>STATUS: ACTIVE</span>
+    <span class="ticker-item">CASE #119-YURIO-EXPOSED<span class="sep">//</span>STATUS: ACTIVE</span>
+    <span class="ticker-item">VICTIM: MOUSE<span class="sep">//</span>ACCOUNT THEFT CONFIRMED</span>
+    <span class="ticker-item">LOGGER DISTRIBUTION<span class="sep">//</span>EVIDENCE VERIFIED</span>
+    <span class="ticker-item">SERVER NUKE<span class="sep">//</span>CRIME SCENE DOCUMENTED</span>
+    <span class="ticker-item">5+ ALT ACCOUNTS<span class="sep">//</span>TRACED AND LOGGED</span>
+    <span class="ticker-item">SKID ACTIVITY<span class="sep">//</span>CONFIRMED</span>
+    <span class="ticker-item">COMMUNITY SHIELD<span class="sep">//</span>ACTIVE</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">UNIT: CYBER_JUSTICE &nbsp;/&nbsp; PUBLIC CASE DATABASE &nbsp;/&nbsp; EST. 2026</div>
+  <div class="hero-logo">CYBER_JUSTICE</div>
+  <div class="hero-tagline">EXPOSING THREATS. PROTECTING THE COMMUNITY.</div>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-val">02</span>
+      <span class="stat-key">CASES FILED</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <span class="stat-val">01</span>
+      <span class="stat-key">CONFIRMED VICTIM</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <span class="stat-val">05+</span>
+      <span class="stat-key">ALT ACCOUNTS LOGGED</span>
+    </div>
+    <div class="stat-div"></div>
+    <div class="stat">
+      <span class="stat-val">07</span>
+      <span class="stat-key">LOGGER EXHIBITS</span>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- MISSION -->
+  <div class="mission">
+    <div class="sec-head" style="color:var(--green);">
+      <span style="color:var(--green);font-size:.58rem;">▶</span>
+      MISSION_STATEMENT
+    </div>
+    <div class="mission-text">
+      <p>
+        <span class="hi-g">CYBER_JUSTICE</span> is a community-operated intelligence unit dedicated to documenting,
+        exposing, and archiving bad actors who exploit, deceive, and harm members of the
+        Discord modding and scripting community.
+      </p>
+      <p>
+        Every case file published here is backed by <span class="hi-g">verified screenshot evidence</span>,
+        forensic timelines, and documented victim accounts.
+        We do not speculate. We do not fabricate.
+        <span class="hi-r">We publish the truth so the community can protect itself.</span>
+      </p>
+      <p>
+        If you have been targeted by a logger, had your account stolen, or had your server nuked —
+        <span class="hi-c">you are not alone</span>. The evidence is here. The community is watching.
+      </p>
+    </div>
+  </div>
+
+  <!-- CASE FILES -->
+  <div>
+    <div class="sec-head">ACTIVE_CASE_FILES — PUBLIC DATABASE</div>
+    <div class="cases-grid">
+
+      <!-- JETX -->
+      <a class="case-card" href="jetx.html">
+        <div class="card-header">
+          <div class="card-id">CASE FILE #992 &nbsp;/&nbsp; 20 JAN 2026</div>
+          <div class="card-status">● ACTIVE</div>
+        </div>
+        <div class="card-body">
+          <div class="card-target">JETX</div>
+          <div class="card-subtitle">AKA: NOT JETX'S ALT &nbsp;/&nbsp; ORIGIN: SPAIN [ES]</div>
+          <div class="threat-bar">
+            <div class="threat-label">THREAT LEVEL ████████████████████ CRITICAL</div>
+            <div class="threat-track"><div class="threat-fill" style="--fw:95%"></div></div>
+          </div>
+          <div class="card-desc">
+            Built a false reputation as a top mod developer then weaponized it to lure
+            <span class="victim">Mouse</span> into his DMs. Delivered
+            <span class="hi">Discord token loggers</span> disguised as mod fixes,
+            stealing accounts. Deployed <span class="hi">nuke bots</span> to destroy servers.
+            Operated <span class="hi">5+ alt accounts</span> to evade bans.
+          </div>
+          <div class="charges">
+            <span class="charge red">ACCOUNT THEFT</span>
+            <span class="charge red">LOGGER DISTRIBUTION</span>
+            <span class="charge red">SERVER NUKING</span>
+            <span class="charge orange">SOCIAL ENGINEERING</span>
+            <span class="charge orange">5+ ALT ACCOUNTS</span>
+            <span class="charge cyan">VICTIM: MOUSE</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">FILED: 20/01/2026</span>
+          <span class="card-cta">VIEW CASE FILE</span>
+        </div>
+      </a>
+
+      <!-- YURIO -->
+      <a class="case-card" href="yurio.html" style="transition-delay:.15s">
+        <div class="card-header">
+          <div class="card-id">CASE FILE #119 &nbsp;/&nbsp; 20 JAN 2026</div>
+          <div class="card-status">● ACTIVE</div>
+        </div>
+        <div class="card-body">
+          <div class="card-target">YURIO</div>
+          <div class="card-subtitle">AKA: SKID NOOB &nbsp;/&nbsp; PLATFORM: DISCORD</div>
+          <div class="threat-bar">
+            <div class="threat-label">THREAT LEVEL ████████████░░░░░░░░ HIGH</div>
+            <div class="threat-track"><div class="threat-fill" style="--fw:60%"></div></div>
+          </div>
+          <div class="card-desc">
+            Distributed a <span class="hi">CPU-wasting, packet-bloated robotics mod</span> 
+            while falsely claiming authorship. The code was stolen and unoptimized — 
+            identified and called out directly by victim
+            <span class="victim">Mouse</span> as skidded garbage.
+          </div>
+          <div class="charges">
+            <span class="charge red">SCRIPT THEFT (SKIDDING)</span>
+            <span class="charge orange">FALSE AUTHORSHIP</span>
+            <span class="charge orange">BLOATED MOD DISTRIBUTION</span>
+            <span class="charge cyan">VICTIM: MOUSE</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">FILED: 20/01/2026</span>
+          <span class="card-cta">VIEW CASE FILE</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- CONSOLE -->
+<div class="console-box" id="console"></div>
+
+<footer>
+  <div class="f-logo">CYBER_JUSTICE</div>
+  UNIT: CYBER_JUSTICE &nbsp;|&nbsp; PUBLIC CASE DATABASE &nbsp;|&nbsp; ALL EVIDENCE VERIFIED<br/>
+  EXPOSING THREATS · PROTECTING THE COMMUNITY · EST. 2026
+</footer>
+
+<script>
+// Clock
+setInterval(() => {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString();
+}, 1000);
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.05 });
+document.querySelectorAll('.case-card, .mission').forEach(el => obs.observe(el));
+
+// Console
+const con = document.getElementById('console');
+const logs = [
+  '[INIT] CYBER_JUSTICE database online.',
+  '[SCAN] 2 active case files loaded.',
+  '[DATA] Case #992: JETX — threat CRITICAL.',
+  '[DATA] Case #119: YURIO — threat HIGH.',
+  '[INFO] Confirmed victim: MOUSE.',
+  '[WARN] Logger vector confirmed in evidence.',
+  '[INFO] 5 alt accounts mapped: JETX.',
+  '[SYSTEM] All exhibits MD5 verified.',
+  '[STATUS] Community shield: ACTIVE.',
+  '[LOG] Session: ' + Math.random().toString(36).substring(2,10).toUpperCase(),
+];
+let i = 0;
+(function addLog() {
+  const d = document.createElement('div');
+  d.style.lineHeight = '1.5';
+  d.textContent = logs[i++ % logs.length];
+  con.appendChild(d);
+  while (con.children.length > 6) con.removeChild(con.firstChild);
+  setTimeout(addLog, Math.random() * 2500 + 900);
+})();
+</script>
+</body>
+</html>
