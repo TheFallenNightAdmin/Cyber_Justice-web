@@ -56,8 +56,12 @@ export default function Home() {
           <span className="stat-label">Unit Status</span>
         </div>
         <div className="stat-box">
-          <span className="stat-val" style={{ fontSize: '36px', letterSpacing: '1px' }}>DANNI & HAX</span>
-          <span className="stat-label">Operations</span>
+          <span className="stat-val" style={{ fontSize: '36px', letterSpacing: '1px' }}>DANNI</span>
+          <span className="stat-label">Head of Operations Sweden</span>
+        </div>
+        <div className="stat-box">
+          <span className="stat-val" style={{ fontSize: '36px', letterSpacing: '1px' }}>Pagoni Hax</span>
+          <span className="stat-label">Core Operations Global</span>
         </div>
       </div>
 
