@@ -12,8 +12,9 @@ export default function Danni() {
       <SectionHeader title="Section 01 // MISSION_REPORT (STATUS: ANALYZED)" />
       <div className="panel">
         <p>
-          "The investigation into JetX reached a critical point when the subject Danni identified the secondary distribution vector at iloveloggers.workers.dev. Operating under restricted conditions on a school-node, Danni successfully exfiltrated the Webhook Metadata before the attacker could trigger a global wipe. This archive stands as the only verified record of the Nuke Bot deployment patterns. Danni's digital sacrifice allowed 40+ users to secure their tokens before the mass-hijack protocol was finalized."
-        </p>
+          Danni’s discovery of a backup distribution path on iloveloggers.workers.dev was the ultimate game-changer for the JetX investigation. Even though Danni was working on a restricted school computer, they managed to pull the Webhook Metadata just seconds before the attacker wiped everything globally. Now, this repository holds the only verified proof of how the Nuke Bot actually operated. Because Danni acted so fast and sacrificed their own access, over forty people were able to recover their tokens before the mass-hijack protocol locked everyone out.
+
+</p>
       </div>
 
       <SectionHeader title="Section 02 // FORENSIC_EXHIBITS (ENCRYPTED: NO)" />
