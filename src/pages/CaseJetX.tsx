@@ -17,6 +17,7 @@ export default function CaseJetX() {
 
   return (
     <div className="case-page">
+      <Link href="/cases" className="back-link">← BACK TO DATABASE</Link>
       <section className="hero hero-page">
         <div className="breadcrumb">CYBER_JUSTICE / CASE FILE #002-JETX-EXPOSED</div>
         <h1 className="hero-title">JETX</h1>
@@ -113,7 +114,7 @@ export default function CaseJetX() {
       <SectionHeader title="FINAL_ASSESSMENT" />
       <div className="panel" style={{ borderLeftColor: 'var(--red)', borderLeftWidth: '5px' }}>
         <h3 style={{ color: 'var(--red)', fontSize: '20px', marginBottom: '15px' }}>⚠ OFFICIAL VERDICT — CASE #002-JETX-EXPOSED ⚠</h3>
-        <h4 style={{ color: 'var(--accent)', fontSize: '18px', marginBottom: '15px' }}>JETX: CONFIRMED ACCOUNT THIEF</h4>
+        <h4 style={{ color: 'var(--red)', fontSize: '18px', marginBottom: '15px' }}>JETX: CONFIRMED ACCOUNT THIEF</h4>
         <ul style={{ paddingLeft: '20px', fontSize: '13px' }}>
           <li>Built fraudulent reputation through community praise manipulation.</li>
           <li>Lured victims into private DMs under the guise of technical support.</li>
