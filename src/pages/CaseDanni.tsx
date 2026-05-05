@@ -1,8 +1,6 @@
 import SectionHeader from "../components/SectionHeader";
 
-const BASE = "https://raw.githubusercontent.com/TheFallenNightAdmin/Cyber_Justice-web/main/proof";
-
-export default function CaseDanni() {
+export default function Danni() {
   return (
     <div className="danni-page">
       <section className="hero hero-page">
@@ -14,23 +12,36 @@ export default function CaseDanni() {
       <SectionHeader title="Section 01 // MISSION_REPORT (STATUS: ANALYZED)" />
       <div className="panel">
         <p>
-          "The investigation into JetX reached a critical point when the subject Danni identified the secondary distribution vector at iloveloggers.workers.dev. Operating under restricted conditions on a school-node, Danni successfully exfiltrated the Webhook Metadata before the attacker could trigger a global wipe. This archive stands as the only verified record of the Nuke Bot deployment patterns. Danni's digital sacrifice allowed 40+ users to secure their tokens before the mass-hijack protocol was finalized."
-        </p>
+          Danni’s discovery of a backup distribution path on iloveloggers.workers.dev was the ultimate game-changer for the JetX investigation. Even though Danni was working on a restricted school computer, they managed to pull the Webhook Metadata just seconds before the attacker wiped everything globally. Now, this repository holds the only verified proof of how the Nuke Bot actually operated. Because Danni acted so fast and sacrificed their own access, over forty people were able to recover their tokens before the mass-hijack protocol locked everyone out.
+
+</p>
       </div>
 
       <SectionHeader title="Section 02 // FORENSIC_EXHIBITS (ENCRYPTED: NO)" />
       <div className="exhibit-grid" style={{ gridTemplateColumns: '1fr' }}>
         <div className="panel">
           <h3 style={{ marginBottom: '10px', fontSize: '16px' }}>EXHIBIT_A: Admission</h3>
-          <img src={`${BASE}/Proof%20vs%20jet%20text%20%232.png`} alt="Admission" className="exhibit-img" />
+          <img 
+            src="https://raw.githubusercontent.com/TheFallenNightAdmin/Cyber_Justice-web/main/Proof/Proof%20vs%20jet%20text%20%232.png" 
+            alt="Admission" 
+            className="exhibit-img"
+          />
         </div>
         <div className="panel">
           <h3 style={{ marginBottom: '10px', fontSize: '16px' }}>EXHIBIT_B: Infrastructure</h3>
-          <img src={`${BASE}/Jet%20alt%20%233.png`} alt="Infrastructure" className="exhibit-img" />
+          <img 
+            src="https://raw.githubusercontent.com/TheFallenNightAdmin/Cyber_Justice-web/main/Proof/Jet%20alt%20%233.png" 
+            alt="Infrastructure" 
+            className="exhibit-img"
+          />
         </div>
         <div className="panel">
           <h3 style={{ marginBottom: '10px', fontSize: '16px' }}>EXHIBIT_C: Termination</h3>
-          <img src={`${BASE}/the%20nuke%20bot%20%232.png`} alt="Termination" className="exhibit-img" />
+          <img 
+            src="https://raw.githubusercontent.com/TheFallenNightAdmin/Cyber_Justice-web/main/Proof/the%20nuke%20bot%20%232.png" 
+            alt="Termination" 
+            className="exhibit-img"
+          />
         </div>
       </div>
 
