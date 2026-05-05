@@ -3,7 +3,7 @@ import Timeline from "../components/Timeline";
 import Exhibit from "../components/Exhibit";
 import { Link } from "wouter";
 
-const BASE = "https://raw.githubusercontent.com/TheFallenNightAdmin/Cyber_Justice-web/main/proof";
+const BASE = "/proof";
 
 export default function CaseJetX() {
   const timelineEntries = [
