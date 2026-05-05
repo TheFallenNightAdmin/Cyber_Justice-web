@@ -352,6 +352,10 @@ body {
   .stats-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
 @media (max-width: 640px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -619,6 +623,14 @@ body {
   font-size: 10px;
   color: var(--text-muted);
   letter-spacing: 0.06em;
+}
+
+.exhibit-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .exhibit-label {
