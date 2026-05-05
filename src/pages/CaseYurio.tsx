@@ -16,6 +16,7 @@ export default function CaseYurio() {
 
   return (
     <div className="case-page">
+      <Link href="/cases" className="back-link">← BACK TO DATABASE</Link>
       <section className="hero hero-page">
         <div className="breadcrumb">CYBER_JUSTICE / CASE FILE #003-YURIO-EXPOSED</div>
         <h1 className="hero-title">YURIO</h1>
