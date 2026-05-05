@@ -20,17 +20,13 @@ export default function Exhibit({ label, badge, image }: ExhibitProps) {
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.style.display = 'none';
-            const placeholder = target.nextSibling as HTMLElement;
-            if (placeholder) placeholder.style.display = 'flex';
           }}
         />
-      ) : null}
-      <div
-        className="exhibit-placeholder"
-        style={{ display: image ? 'none' : 'flex' }}
-      >
-        [SCREENSHOT — UPLOAD VIA GITHUB TO DISPLAY]
-      </div>
+      ) : (
+        <div className="exhibit-placeholder">
+          [SCREENSHOT — UPLOAD VIA GITHUB TO DISPLAY]
+        </div>
+      )}
     </div>
   );
 }
